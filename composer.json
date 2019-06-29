@@ -16,7 +16,7 @@
     "require": {
         "php": ">=7.1.0",
         "dor/http": "0.0.0",
-        "dor/router": "0.0.0",
+        "dor/router": "0.0.1",
         "filp/whoops": "^2.4",
         "symfony/console": "^4.0",
         "illuminate/database": "^5.6",
