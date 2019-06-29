@@ -30,23 +30,21 @@ class Kernel
     private $response;
     private $isOnDebugMode = false;
 
-    public function __construct(){
-
+    public function __construct(Config $config){
         // Load config file.
-        Kernel::$config = include(__DOR_ROOT__ . 'config.php');
+        Kernel::$config = $config;
 
         // Setup Twig template engine.
-        $loader = new \Twig_Loader_Filesystem(__DOR_ROOT__ . Kernel::$config['system']['directories']['view'] . '/');
+        $loader = new \Twig_Loader_Filesystem($config->getViewDirectory());
         Kernel::$twig = new \Twig_Environment(
             $loader,
             [
-                'debug' => Kernel::$config['debug_mode']
+                'debug' => $config->getContent()['debug_mode']
             ]
         );
-        require_once __DOR_ROOT__ . Kernel::$config['system']['directories']['configs'] . '/twig.php';
-
+        
         // Check and set debug mode.
-        if(Kernel::$config['debug_mode']){
+        if($config->isOnDebugMode()){
             $this->enableDebugMode();
         }
         else{
@@ -54,17 +52,21 @@ class Kernel
         }
 
         //Setup Illuminate database if there is database config.
-        if(Kernel::$config['database'] !== false) {
+        if($config->getContent()['database'] !== false) {
             $capsule = new CapsuleManager();
-            $capsule->addConnection(Kernel::$config['database']);
+            $capsule->addConnection($config->getDatabaseConfig());
             $capsule->setAsGlobal();
             $capsule->bootEloquent();
             Kernel::$capsule = $capsule;
         }
-        require_once __DOR_ROOT__ . Kernel::$config['system']['directories']['configs'] . '/illuminate.php';
+
+        // Load configs
+        foreach (glob($config->getConfigsDirectory() . "/*.php") as $filename) {
+            include_once($filename);
+        }
 
         // Load models
-        foreach (glob(__DOR_ROOT__ . Kernel::$config['system']['directories']['model'] . "/*.php") as $filename) {
+        foreach (glob($config->getModelDirectory() . "/*.php") as $filename) {
             include_once($filename);
         }
     }
@@ -110,10 +112,13 @@ class Kernel
         $rrp->add('Dor\Http\Request', $req);
         $rrp->add('Illuminate\Database\Capsule\Manager', Kernel::$capsule);
 
+        $controllerDirectory = Kernel::$config->getControllerDirectory();
+        $routesDirectory = Kernel::$config->getRoutesDirectory();
+
         $router = new Router(
             $req,
-            __DOR_ROOT__ . Kernel::$config['system']['directories']['controller'],
-            __DOR_ROOT__ . Kernel::$config['system']['directories']['routes'],
+            $controllerDirectory,
+            $routesDirectory,
             '\\Dor\\Controller\\',
             $rrp
         );
@@ -125,7 +130,7 @@ class Kernel
         $noAnyControllerResponse = new Response();
         $noAnyControllerResponse->setStatus(Response::STATUS[404]);
         $noAnyControllerResponse->body = Kernel::$twig->render(
-            Kernel::$config['app']['404_page'],
+            Kernel::$config->getContent()['app']['404_page'],
             array()
         );
         return $noAnyControllerResponse;
@@ -140,7 +145,6 @@ class Kernel
                 $this->setInnerResponse($request);
             }
             catch (\Exception $exception){
-                include(__DIR__ . '/ErrorResponse.php');
                 $this->response = new ErrorResponse($exception);
             }
         }
