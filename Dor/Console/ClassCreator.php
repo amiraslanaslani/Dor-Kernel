@@ -19,7 +19,7 @@ abstract class ClassCreator extends Command
     private $classType;
     private $classTypeText;
 
-    protected $templatesPath = __FILE__ . '/Templates/';
+    protected $templatesPath = __DIR__ . '/Templates/';
 
     protected function setDirectory(string $dir){
         $this->directory = $dir;
