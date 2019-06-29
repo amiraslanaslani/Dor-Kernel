@@ -2,7 +2,7 @@
 
 namespace Dor\Table;
 
-use Dor\Util\AbstractTable;
+use Dor\Abstracts\AbstractTable;
 
 class {{name}} extends AbstractTable
 {

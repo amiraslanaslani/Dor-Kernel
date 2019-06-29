@@ -5,7 +5,7 @@
  * Time: 5:13 AM
  */
 
-namespace Dor\Util;
+namespace Dor\Abstracts;
 
 
 use Illuminate\Database\Eloquent\Model;

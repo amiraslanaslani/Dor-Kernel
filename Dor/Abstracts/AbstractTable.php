@@ -5,7 +5,7 @@
  * Time: 6:57 PM
  */
 
-namespace Dor\Util;
+namespace Dor\Abstracts;
 
 
 use Illuminate\Database\Capsule\Manager;

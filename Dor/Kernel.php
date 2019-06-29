@@ -7,9 +7,6 @@
 
 namespace Dor;
 
-require_once(__DIR__ . '/AbstractController.php');
-require_once(__DIR__ . '/InputCheck.php');
-
 use Dor\Util\{
     ErrorResponse
 };
@@ -67,7 +64,6 @@ class Kernel
         require_once __DOR_ROOT__ . Kernel::$config['system']['directories']['configs'] . '/illuminate.php';
 
         // Load models
-        require_once(__DOR_ROOT__ . 'system/AbstractModel.php');
         foreach (glob(__DOR_ROOT__ . Kernel::$config['system']['directories']['model'] . "/*.php") as $filename) {
             include_once($filename);
         }

@@ -2,7 +2,7 @@
 
 namespace Dor\Model;
 
-use Dor\Util\AbstractModel;
+use Dor\Abstracts\AbstractModel;
 
 class {{name}} extends AbstractModel
 {

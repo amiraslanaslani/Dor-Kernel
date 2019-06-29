@@ -5,7 +5,7 @@
  * Time: 10:53 PM
  */
 
-namespace Dor\Util;
+namespace Dor\Abstracts;
 
 use Dor\Kernel;
 use Dor\Http\Response;

@@ -2,7 +2,7 @@
 
 namespace Dor\Controller;
 
-use Dor\Util\AbstractController;
+use Dor\Abstracts\AbstractController;
 
 class {{name}} extends AbstractController
 {
