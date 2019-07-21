@@ -39,11 +39,10 @@ class TableManager extends Command
             $capsule->setAsGlobal();
             $capsule->bootEloquent();
 
-            require_once __BASE_ROOT__ . 'system/AbstractTable.php';
             $className = $input->getArgument("name") . "Table";
             require_once(__BASE_ROOT__ . "src/tables/{$className}.php");
             $className = '\\Dor\\Table\\' . $className;
-            require_once __BASE_ROOT__ . $config['system']['directories']['configs'] . '/illuminate.php';
+            // require_once __BASE_ROOT__ . $config['system']['directories']['configs'] . '/illuminate.php';
             $table = new $className($capsule);
             $method = $this->method;
             $table->$method();
